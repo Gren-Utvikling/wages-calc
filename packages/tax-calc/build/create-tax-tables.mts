@@ -13,8 +13,6 @@ const yearContent: string[] = [];
 const yearLookup: string[] = [];
 const yearTable: string[] = [];
 
-yearContent.push();
-
 const taxTableDir = path.resolve(__dirname, '..', 'tables');
 for (const tables of await globby('*.txt', { cwd: taxTableDir })) {
 	const filePath = path.resolve(taxTableDir, tables);
