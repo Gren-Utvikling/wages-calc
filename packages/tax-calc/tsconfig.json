@@ -1,0 +1,9 @@
+{
+  "extends": "@grenutv/tsconfig",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": "src"
+  },
+  "include": ["src/**/*"]
+}

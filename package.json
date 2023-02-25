@@ -1,0 +1,27 @@
+{
+  "name": "grenutv-wages",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@grenutv/eslint-config": "workspace:*",
+    "prettier": "^2.8.4",
+    "turbo": "^1.8.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "packageManager": "pnpm@7.28.0",
+  "dependencies": {
+    "typescript": "5.0.0-beta"
+  }
+}
