@@ -1,0 +1,19 @@
+{
+	"name": "@grenutv/dates",
+	"version": "0.0.0",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "tsc"
+	},
+	"dependencies": {
+		"date-holidays": "3.16.17",
+		"temporal-polyfill": "0.1.1",
+		"tslib": "2.5.0"
+	},
+	"devDependencies": {
+		"@grenutv/tsconfig": "workspace:*",
+		"@types/node": "18.14.1",
+		"typescript": "^5.0.0-beta"
+	}
+}
