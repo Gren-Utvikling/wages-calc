@@ -57,7 +57,7 @@ const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
 
 	return (
 		<div
-			class="border border-gray-700 dark:border-gray-300"
+			class="border border-gray-700 dark:border-gray-300 m-2 p-2 rounded"
 			data-month={month.name}
 		>
 			<h2 class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4">
@@ -75,9 +75,11 @@ export default function Home() {
 			<h1 class="max-6-xs text-6xl text-sky-700 dark:text-sky-300 font-thin uppercase my-16">
 				{calendar.year}
 			</h1>
-			{calendar.months.map((month) => (
-				<MonthView month={month} />
-			))}
+			<div class="flex flex-row flex-wrap justify-center">
+				{calendar.months.map((month) => (
+					<MonthView month={month} />
+				))}
+			</div>
 		</main>
 	);
 }
