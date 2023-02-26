@@ -28,6 +28,7 @@ importers:
       solid-start: 0.2.22
       solid-start-node: 0.2.19
       tailwindcss: 3.2.4
+      temporal-polyfill: 0.1.1
       typescript: 4.9.4
       undici: 5.15.1
       vite: 3.2.5
@@ -37,6 +38,7 @@ importers:
       '@solidjs/router': 0.7.0_solid-js@1.6.11
       solid-js: 1.6.11
       solid-start: 0.2.22_g7v6ej3xzh2kemmoe3yo375itq
+      temporal-polyfill: 0.1.1
       undici: 5.15.1
     devDependencies:
       '@grenutv/dates': link:../../packages/dates
