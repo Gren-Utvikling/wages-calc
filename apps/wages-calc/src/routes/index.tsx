@@ -64,7 +64,7 @@ const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
 				{monthName(month)}
 			</h2>
 
-			<div class="grid grid-cols-8">{cells}</div>
+			<div class="grid grid-cols-8 gap-1">{cells}</div>
 		</div>
 	);
 };
