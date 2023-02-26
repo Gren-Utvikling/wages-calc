@@ -3,6 +3,11 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs"
+		}
+	},
 	"scripts": {
 		"build": "tsc && ts-node-esm ./build/create-tax-tables.mts && cp ./src/*.d.mts ./dist/"
 	},

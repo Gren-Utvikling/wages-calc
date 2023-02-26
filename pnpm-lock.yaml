@@ -50,19 +50,23 @@ importers:
 
   packages/dates:
     specifiers:
+      '@grenutv/tax-calc': workspace:*
       '@grenutv/tsconfig': workspace:*
       '@types/node': 18.14.1
       date-holidays: 3.16.17
       temporal-polyfill: 0.1.1
+      ts-node: 10.9.1
       tslib: 2.5.0
       typescript: ^5.0.0-beta
     dependencies:
-      date-holidays: 3.16.17
+      '@grenutv/tax-calc': link:../tax-calc
       temporal-polyfill: 0.1.1
       tslib: 2.5.0
     devDependencies:
       '@grenutv/tsconfig': link:../tsconfig
       '@types/node': 18.14.1
+      date-holidays: 3.16.17
+      ts-node: 10.9.1_hznzi5faxaer3gfrqkrzuyhgjq
       typescript: 5.0.0-beta
 
   packages/eslint-config:
@@ -1554,7 +1558,6 @@ packages:
 
   /argparse/2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
-    dev: false
 
   /array-includes/3.1.6:
     resolution: {integrity: sha512-sgTbLvL6cNnw24FnbaDyjmvddQ2ML8arZsgaJhoABMoplz/4QRhtrYS+alr1BUM1Bwp6dhx8vVCBSLG+StwOFw==}
@@ -1590,7 +1593,7 @@ packages:
   /astronomia/4.1.1:
     resolution: {integrity: sha512-TcJD9lUC5eAo0/Ji7rnQauX/yQbi0yZWM+JsNr77W3OA5fsrgvuFgubLMFwfw4VlZ29cu9dG/yfJbfvuTSftjg==}
     engines: {node: '>=12.0.0'}
-    dev: false
+    dev: true
 
   /autoprefixer/10.4.13_postcss@8.4.21:
     resolution: {integrity: sha512-49vKpMqcZYsJjwotvt4+h/BCjJVnhGwcLpDt5xkcaOG3eLrG/HUYLagrihYsQ+qrIBgIzX1Rw7a6L8I/ZA1Atg==}
@@ -1730,7 +1733,7 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       moment-timezone: 0.5.41
-    dev: false
+    dev: true
 
   /call-bind/1.0.2:
     resolution: {integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==}
@@ -1881,19 +1884,19 @@ packages:
   /date-bengali-revised/2.0.2:
     resolution: {integrity: sha512-q9iDru4+TSA9k4zfm0CFHJj6nBsxP7AYgWC/qodK/i7oOIlj5K2z5IcQDtESfs/Qwqt/xJYaP86tkazd/vRptg==}
     engines: {node: '>=12.0.0'}
-    dev: false
+    dev: true
 
   /date-chinese/2.1.4:
     resolution: {integrity: sha512-WY+6+Qw92ZGWFvGtStmNQHEYpNa87b8IAQ5T8VKt4wqrn24lBXyyBnWI5jAIyy7h/KVwJZ06bD8l/b7yss82Ww==}
     engines: {node: '>=12.0.0'}
     dependencies:
       astronomia: 4.1.1
-    dev: false
+    dev: true
 
   /date-easter/1.0.2:
     resolution: {integrity: sha512-mpC1izx7lUSLYl4B88V2W57eNB4xS2ic+ahxK2AYUsaBTsCeHzT6K5ymUKzL9YPFf/GlygFqpiD4/NO1hxDsLw==}
     engines: {node: '>=12.0.0'}
-    dev: false
+    dev: true
 
   /date-holidays-parser/3.4.3:
     resolution: {integrity: sha512-o2GYEQC1Ytypz7svRFwKO9DEyg3yc2ZwMJnIVIUU6NDOpsknsewt+QilU/z/nHzI1qj13zVIvFIHgEnjg6neVA==}
@@ -1907,7 +1910,7 @@ packages:
       deepmerge: 4.3.0
       jalaali-js: 1.2.6
       moment-timezone: 0.5.41
-    dev: false
+    dev: true
 
   /date-holidays/3.16.17:
     resolution: {integrity: sha512-sKp0pWC9MGpxoJZBwVSF20zhpd14FUMoOo40IcZsN9MnX8/djtA/Rh+pKkO4DCzsqiiLTChunwqG4E0mM94iaQ==}
@@ -1919,7 +1922,7 @@ packages:
       lodash.omit: 4.5.0
       lodash.pick: 4.4.0
       prepin: 1.0.3
-    dev: false
+    dev: true
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -3141,7 +3144,7 @@ packages:
 
   /jalaali-js/1.2.6:
     resolution: {integrity: sha512-io974va+Qyu+UfuVX3UIAgJlxLhAMx9Y8VMfh+IG00Js7hXQo1qNQuwSiSa0xxco0SVgx5HWNkaiCcV+aZ8WPw==}
-    dev: false
+    dev: true
 
   /joi/17.8.3:
     resolution: {integrity: sha512-q5Fn6Tj/jR8PfrLrx4fpGH4v9qM6o+vDUfD4/3vxxyg34OmKcNqYZ1qn2mpLza96S8tL0p0rIw2gOZX+/cTg9w==}
@@ -3164,7 +3167,6 @@ packages:
     hasBin: true
     dependencies:
       argparse: 2.0.1
-    dev: false
 
   /jsesc/0.5.0:
     resolution: {integrity: sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA==}
@@ -3235,11 +3237,11 @@ packages:
 
   /lodash.omit/4.5.0:
     resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
-    dev: false
+    dev: true
 
   /lodash.pick/4.4.0:
     resolution: {integrity: sha512-hXt6Ul/5yWjfklSGvLQl8vM//l3FtyHZeuelpzK6mm99pNvN9yTDruNZPEJZD1oWrqo+izBmB7oUfWgcCX7s4Q==}
-    dev: false
+    dev: true
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -3312,11 +3314,11 @@ packages:
     resolution: {integrity: sha512-e0jGNZDOHfBXJGz8vR/sIMXvBIGJJcqFjmlg9lmE+5KX1U7/RZNMswfD8nKnNCnQdKTIj50IaRKwl1fvMLyyRg==}
     dependencies:
       moment: 2.29.4
-    dev: false
+    dev: true
 
   /moment/2.29.4:
     resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
-    dev: false
+    dev: true
 
   /mri/1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -3602,7 +3604,7 @@ packages:
   /prepin/1.0.3:
     resolution: {integrity: sha512-0XL2hreherEEvUy0fiaGEfN/ioXFV+JpImqIzQjxk6iBg4jQ2ARKqvC4+BmRD8w/pnpD+lbxvh0Ub+z7yBEjvA==}
     hasBin: true
-    dev: false
+    dev: true
 
   /prettier/2.8.4:
     resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
@@ -4123,6 +4125,37 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       regexparam: 1.3.0
+
+  /ts-node/10.9.1_hznzi5faxaer3gfrqkrzuyhgjq:
+    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.9
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.3
+      '@types/node': 18.14.1
+      acorn: 8.8.2
+      acorn-walk: 8.2.0
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 5.0.0-beta
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    dev: true
 
   /ts-node/10.9.1_pjqcim4pp5znuaerid7jjmpmbu:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}

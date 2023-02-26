@@ -1,0 +1,7 @@
+{
+	"extends": "@grenutv/tsconfig/node",
+	"compilerOptions": {
+		"noEmit": true
+	},
+	"include": ["**/*"]
+}

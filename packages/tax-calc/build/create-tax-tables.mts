@@ -24,7 +24,7 @@ for (const tables of await globby('*.txt', { cwd: taxTableDir })) {
 	const tablesDir = path.resolve(distDir, tablesName);
 
 	yearContent.push(
-		`import * as year${tablesName} from './${tablesName}.mjs';`,
+		`import * as year${tablesName} from './tables/${tablesName}.mjs';`,
 		`export { year${tablesName} };`
 	);
 	yearLookup.push(`		case "${tablesName}":`, `			return year${tablesName};`);

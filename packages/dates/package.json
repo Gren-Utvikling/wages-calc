@@ -3,17 +3,24 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs"
+		}
+	},
 	"scripts": {
-		"build": "tsc"
+		"build": "tsc && ts-node-esm ./build/build-dates-tables.mts && cp ./src/*.d.mts ./dist/"
 	},
 	"dependencies": {
-		"date-holidays": "3.16.17",
+		"@grenutv/tax-calc": "workspace:*",
 		"temporal-polyfill": "0.1.1",
 		"tslib": "2.5.0"
 	},
 	"devDependencies": {
 		"@grenutv/tsconfig": "workspace:*",
 		"@types/node": "18.14.1",
+		"date-holidays": "3.16.17",
+		"ts-node": "10.9.1",
 		"typescript": "^5.0.0-beta"
 	}
 }
