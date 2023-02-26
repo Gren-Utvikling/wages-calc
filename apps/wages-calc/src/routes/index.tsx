@@ -3,7 +3,7 @@ import Counter from '~/components/Counter';
 import { years } from '@grenutv/tax-calc';
 import { type CalendarMonth, year } from '@grenutv/dates';
 import { type Temporal } from 'temporal-polyfill';
-import { createSignal } from 'solid-js';
+import { createSignal, createMemo } from 'solid-js';
 
 const currentYear = years[years.length - 1];
 const calendar = await year(currentYear);
@@ -33,7 +33,7 @@ const DayView = ({
 	return <CalCell>{day.day}</CalCell>;
 };
 
-const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
+const MonthCalendarView = ({ month }: { readonly month: CalendarMonth }) => {
 	const firstDay = month.days[0].day;
 	const cells = [
 		<CalCell>Wk</CalCell>,
@@ -60,23 +60,45 @@ const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
 		cells.push(<DayView day={day.day} type={day.type} />);
 	}
 
+	return <div class="grid grid-cols-8 gap-1">{cells}</div>;
+};
+
+const MonthWageView = ({ month }: { readonly month: CalendarMonth }) => {
+	return (
+		<div>
+			<p>Front</p>
+		</div>
+	);
+};
+
+const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
+	const [showCalendar, setShowCalendar] = createSignal(false);
+	const content = createMemo(() =>
+		showCalendar() ? (
+			<MonthCalendarView month={month} />
+		) : (
+			<MonthWageView month={month} />
+		)
+	);
+
 	return (
 		<div
 			class="border border-gray-700 dark:border-gray-300 m-2 p-2 rounded"
 			data-month={month.name}
 		>
-			<h2 class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4">
+			<h2
+				class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4"
+				onClick={() => setShowCalendar((v) => !v)}
+			>
 				{monthName(month)}
 			</h2>
 
-			<div class="grid grid-cols-8 gap-1">{cells}</div>
+			{content()}
 		</div>
 	);
 };
 
 export default function Home() {
-	const [side, setSide] = createSignal('front');
-
 	return (
 		<main class="text-center mx-auto text-gray-700 dark:text-gray-300 p-4">
 			<h1 class="max-6-xs text-6xl text-sky-700 dark:text-sky-300 font-thin uppercase my-16">
@@ -84,21 +106,7 @@ export default function Home() {
 			</h1>
 			<div class="grid grid-cols-3 gap-4">
 				{calendar.months.map((month) => (
-					<div>
-						{side() === 'front' ? (
-							<div>
-								<p>Front</p>
-								<button
-									onClick={() => setSide('back')}
-									class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								>
-									Se kalender
-								</button>
-							</div>
-						) : (
-							<MonthView month={month} />
-						)}
-					</div>
+					<MonthView month={month} />
 				))}
 			</div>
 		</main>
