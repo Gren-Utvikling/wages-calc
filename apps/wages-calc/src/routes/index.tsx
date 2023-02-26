@@ -18,6 +18,10 @@ const monthName = (month: CalendarMonth) => {
 	return monthNames[month.month.month - 1];
 };
 
+const CalCell = ({ children, class: className }: any) => {
+	return <div class={`p-2 ${className}`}>{children}</div>;
+};
+
 const DayView = ({
 	day,
 	type,
@@ -25,32 +29,32 @@ const DayView = ({
 	readonly day: Temporal.PlainDate;
 	readonly type: 'workday' | 'offday' | 'vacation';
 }) => {
-	return <div>{day.day}</div>;
+	return <CalCell>{day.day}</CalCell>;
 };
 
 const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
 	const firstDay = month.days[0].day;
 	const cells = [
-		<div>Wk</div>,
-		<div>Mo</div>,
-		<div>Tu</div>,
-		<div>We</div>,
-		<div>Th</div>,
-		<div>Fr</div>,
-		<div>Sa</div>,
-		<div>Su</div>,
+		<CalCell>Wk</CalCell>,
+		<CalCell>Mo</CalCell>,
+		<CalCell>Tu</CalCell>,
+		<CalCell>We</CalCell>,
+		<CalCell>Th</CalCell>,
+		<CalCell>Fr</CalCell>,
+		<CalCell>Sa</CalCell>,
+		<CalCell>Su</CalCell>,
 	];
 
 	if (firstDay.dayOfWeek > 0) {
 		cells.push(<div>{firstDay.weekOfYear}</div>);
 		for (let i = 0; i < firstDay.dayOfWeek - 1; i++) {
-			cells.push(<div></div>);
+			cells.push(<CalCell />);
 		}
 	}
 
 	for (const day of month.days) {
 		if (day.day.dayOfWeek === 1) {
-			cells.push(<div>{day.day.weekOfYear}</div>);
+			cells.push(<CalCell>{day.day.weekOfYear}</CalCell>);
 		}
 		cells.push(<DayView day={day.day} type={day.type} />);
 	}
