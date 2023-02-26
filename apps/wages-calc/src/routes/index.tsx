@@ -3,6 +3,7 @@ import Counter from '~/components/Counter';
 import { years } from '@grenutv/tax-calc';
 import { type CalendarMonth, year } from '@grenutv/dates';
 import { type Temporal } from 'temporal-polyfill';
+import { createSignal } from 'solid-js';
 
 const currentYear = years[years.length - 1];
 const calendar = await year(currentYear);
@@ -74,14 +75,30 @@ const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
 };
 
 export default function Home() {
+	const [side, setSide] = createSignal('front');
+
 	return (
 		<main class="text-center mx-auto text-gray-700 dark:text-gray-300 p-4">
 			<h1 class="max-6-xs text-6xl text-sky-700 dark:text-sky-300 font-thin uppercase my-16">
 				{calendar.year}
 			</h1>
-			<div class="flex flex-row flex-wrap justify-center">
+			<div class="grid grid-cols-3 gap-4">
 				{calendar.months.map((month) => (
-					<MonthView month={month} />
+					<div>
+						{side() === 'front' ? (
+							<div>
+								<p>Front</p>
+								<button
+									onClick={() => setSide('back')}
+									class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								>
+									Se kalender
+								</button>
+							</div>
+						) : (
+							<MonthView month={month} />
+						)}
+					</div>
 				))}
 			</div>
 		</main>
