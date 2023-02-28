@@ -1,9 +1,8 @@
-import { A } from 'solid-start';
-import Counter from '~/components/Counter';
 import { years } from '@grenutv/tax-calc';
 import { type CalendarMonth, year } from '@grenutv/dates';
 import { type Temporal } from 'temporal-polyfill';
 import { createSignal, createMemo } from 'solid-js';
+import { FlipButton, FlipCard } from '~/components/FlipCard';
 
 const currentYear = years[years.length - 1];
 const calendar = await year(currentYear);
@@ -63,7 +62,11 @@ const MonthCalendarView = ({ month }: { readonly month: CalendarMonth }) => {
 	return <div class="grid grid-cols-8 gap-1">{cells}</div>;
 };
 
-const MonthWageView = ({ month }: { readonly month: CalendarMonth }) => {
+type MonthViewProps = {
+	readonly month: CalendarMonth;
+};
+
+const MonthWageView = ({ month }: MonthViewProps) => {
 	return (
 		<div>
 			<p>Front</p>
@@ -71,30 +74,72 @@ const MonthWageView = ({ month }: { readonly month: CalendarMonth }) => {
 	);
 };
 
-const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
-	const [showCalendar, setShowCalendar] = createSignal(false);
-	const content = createMemo(() =>
-		showCalendar() ? (
-			<MonthCalendarView month={month} />
-		) : (
-			<MonthWageView month={month} />
-		)
-	);
+// const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
+// 	const [showCalendar, setShowCalendar] = createSignal(false);
+// 	const content = createMemo(() =>
+// 		showCalendar() ? (
+// 			<MonthCalendarView month={month} />
+// 		) : (
+// 			<MonthWageView month={month} />
+// 		)
+// 	);
 
+// 	return (
+// 		<div
+// 			class="border border-gray-700 dark:border-gray-300 m-2 p-2 rounded"
+// 			data-month={month.name}
+// 		>
+// 			<h2
+// 				class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4"
+// 				onClick={() => setShowCalendar((v) => !v)}
+// 			>
+// 				{monthName(month)}
+// 			</h2>
+
+// 			{content()}
+// 		</div>
+// 	);
+// };
+
+type MonthViewSideProps = MonthViewProps & {
+	readonly onFlip: () => void;
+};
+
+const MonthViewFront = ({ month, onFlip }: MonthViewSideProps) => {
 	return (
-		<div
-			class="border border-gray-700 dark:border-gray-300 m-2 p-2 rounded"
-			data-month={month.name}
-		>
-			<h2
-				class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4"
-				onClick={() => setShowCalendar((v) => !v)}
-			>
+		<>
+			<h2 class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4">
 				{monthName(month)}
 			</h2>
+			<FlipButton onClick={onFlip} />
+		</>
+	);
+};
 
-			{content()}
-		</div>
+const MonthViewBack = ({ month, onFlip }: MonthViewSideProps) => {
+	return (
+		<>
+			<h2 class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4">
+				{monthName(month)}
+			</h2>
+			<FlipButton onClick={onFlip} />
+			<MonthCalendarView month={month} />
+		</>
+	);
+};
+
+const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
+	const [flipped, setFlipped] = createSignal(false);
+	const flip = () => {
+		setFlipped((v) => !v);
+	};
+
+	return (
+		<FlipCard
+			front={<MonthViewFront month={month} onFlip={flip} />}
+			back={<MonthViewBack month={month} onFlip={flip} />}
+			flipped={flipped}
+		/>
 	);
 };
 
