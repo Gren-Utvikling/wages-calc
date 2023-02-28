@@ -23,6 +23,7 @@ importers:
       '@solidjs/meta': 0.28.2
       '@solidjs/router': 0.7.0
       autoprefixer: 10.4.13
+      clsx: 1.2.1
       material-symbols: 0.4.5
       postcss: 8.4.21
       solid-js: 1.6.11
@@ -37,6 +38,7 @@ importers:
       '@grenutv/tsconfig': link:../../packages/tsconfig
       '@solidjs/meta': 0.28.2_solid-js@1.6.11
       '@solidjs/router': 0.7.0_solid-js@1.6.11
+      clsx: 1.2.1
       material-symbols: 0.4.5
       solid-js: 1.6.11
       solid-start: 0.2.22_g7v6ej3xzh2kemmoe3yo375itq
@@ -1796,6 +1798,11 @@ packages:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
 
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}

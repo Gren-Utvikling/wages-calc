@@ -1,8 +1,9 @@
 import { years } from '@grenutv/tax-calc';
 import { type CalendarMonth, year } from '@grenutv/dates';
 import { type Temporal } from 'temporal-polyfill';
-import { createSignal, createMemo } from 'solid-js';
+import { type Accessor, createSignal, type JSX } from 'solid-js';
 import { FlipButton, FlipCard } from '~/components/FlipCard';
+import { clsx } from 'clsx';
 
 const currentYear = years[years.length - 1];
 const calendar = await year(currentYear);
@@ -18,48 +19,168 @@ const monthName = (month: CalendarMonth) => {
 	return monthNames[month.month.month - 1];
 };
 
-const CalCell = ({ children, class: className }: any) => {
-	return <div class={`p-2 ${className}`}>{children}</div>;
+type CalCelProps = {
+	readonly children: JSX.Element;
+	readonly class?: string;
+	readonly classList?: {
+		readonly [k: string]: boolean | undefined;
+	};
+	readonly row: number;
+	readonly col: number;
+};
+
+const rowClass = (row: number) => {
+	switch (row) {
+		case 0:
+			return 'row-start-1';
+		case 1:
+			return 'row-start-2';
+		case 2:
+			return 'row-start-3';
+		case 3:
+			return 'row-start-4';
+		case 4:
+			return 'row-start-5';
+		case 5:
+			return 'row-start-6';
+		case 6:
+			return 'row-start-7';
+	}
+};
+
+const colClass = (col: number) => {
+	switch (col) {
+		case 0:
+			return 'col-start-1';
+		case 1:
+			return 'col-start-2';
+		case 2:
+			return 'col-start-3';
+		case 3:
+			return 'col-start-4';
+		case 4:
+			return 'col-start-5';
+		case 5:
+			return 'col-start-6';
+		case 6:
+			return 'col-start-7';
+		case 7:
+			return 'col-start-8';
+	}
+};
+
+const CalCell = ({
+	children,
+	class: className,
+	classList,
+	row,
+	col,
+}: CalCelProps) => {
+	const rowClassName = rowClass(row);
+	const colClassName = colClass(col);
+	const classes = clsx(rowClassName, colClassName, className, 'p-2');
+
+	return (
+		<div class={classes} classList={classList}>
+			{children}
+		</div>
+	);
 };
 
 const DayView = ({
 	day,
 	type,
+	row,
+	col,
 }: {
 	readonly day: Temporal.PlainDate;
-	readonly type: 'workday' | 'offday' | 'vacation';
+	readonly type: Accessor<'workday' | 'offday' | 'vacation'>;
+	readonly row: number;
+	readonly col: number;
 }) => {
-	return <CalCell>{day.day}</CalCell>;
+	return (
+		<CalCell
+			row={row}
+			col={col}
+			classList={{
+				'dark:bg-green-900': type() === 'workday',
+				'dark:bg-red-900': type() === 'offday',
+				'dark:bg-blue-900': type() === 'vacation',
+			}}
+		>
+			{day.day}
+		</CalCell>
+	);
 };
 
 const MonthCalendarView = ({ month }: { readonly month: CalendarMonth }) => {
 	const firstDay = month.days[0].day;
-	const cells = [
-		<CalCell>Wk</CalCell>,
-		<CalCell>Mo</CalCell>,
-		<CalCell>Tu</CalCell>,
-		<CalCell>We</CalCell>,
-		<CalCell>Th</CalCell>,
-		<CalCell>Fr</CalCell>,
-		<CalCell>Sa</CalCell>,
-		<CalCell>Su</CalCell>,
+	const headings: JSX.Element[] = [
+		<CalCell row={0} col={0} class="dark:bg-orange-900">
+			Wk
+		</CalCell>,
+		<CalCell row={0} col={1}>
+			Mo
+		</CalCell>,
+		<CalCell row={0} col={2}>
+			Tu
+		</CalCell>,
+		<CalCell row={0} col={3}>
+			We
+		</CalCell>,
+		<CalCell row={0} col={4}>
+			Th
+		</CalCell>,
+		<CalCell row={0} col={5}>
+			Fr
+		</CalCell>,
+		<CalCell row={0} col={6}>
+			Sa
+		</CalCell>,
+		<CalCell row={0} col={7}>
+			Su
+		</CalCell>,
 	];
 
-	if (firstDay.dayOfWeek > 0) {
-		cells.push(<div>{firstDay.weekOfYear}</div>);
-		for (let i = 0; i < firstDay.dayOfWeek - 1; i++) {
-			cells.push(<CalCell />);
-		}
+	const weekNumbers: JSX.Element[] = [];
+	const days: JSX.Element[] = [];
+
+	if (month.days[0].day.dayOfWeek !== 1) {
+		weekNumbers.push(
+			<CalCell row={1} col={0} class="dark:bg-orange-900">
+				{month.days[0].day.weekOfYear}
+			</CalCell>
+		);
 	}
 
+	let row = 1;
 	for (const day of month.days) {
 		if (day.day.dayOfWeek === 1) {
-			cells.push(<CalCell>{day.day.weekOfYear}</CalCell>);
+			row = row + 1;
+			weekNumbers.push(
+				<CalCell row={row} col={0} class="dark:bg-orange-900">
+					{day.day.weekOfYear}
+				</CalCell>
+			);
 		}
-		cells.push(<DayView day={day.day} type={day.type} />);
+
+		days.push(
+			<DayView
+				row={row}
+				col={day.day.dayOfWeek}
+				day={day.day}
+				type={() => day.type}
+			/>
+		);
 	}
 
-	return <div class="grid grid-cols-8 gap-1">{cells}</div>;
+	return (
+		<div class="grid grid-cols-8">
+			{headings}
+			{weekNumbers}
+			{days}
+		</div>
+	);
 };
 
 type MonthViewProps = {
@@ -74,32 +195,13 @@ const MonthWageView = ({ month }: MonthViewProps) => {
 	);
 };
 
-// const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
-// 	const [showCalendar, setShowCalendar] = createSignal(false);
-// 	const content = createMemo(() =>
-// 		showCalendar() ? (
-// 			<MonthCalendarView month={month} />
-// 		) : (
-// 			<MonthWageView month={month} />
-// 		)
-// 	);
-
-// 	return (
-// 		<div
-// 			class="border border-gray-700 dark:border-gray-300 m-2 p-2 rounded"
-// 			data-month={month.name}
-// 		>
-// 			<h2
-// 				class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4"
-// 				onClick={() => setShowCalendar((v) => !v)}
-// 			>
-// 				{monthName(month)}
-// 			</h2>
-
-// 			{content()}
-// 		</div>
-// 	);
-// };
+const MonthNameDisplay = ({ month }: MonthViewProps) => {
+	return (
+		<h2 class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4">
+			{monthName(month)}
+		</h2>
+	);
+};
 
 type MonthViewSideProps = MonthViewProps & {
 	readonly onFlip: () => void;
@@ -108,10 +210,9 @@ type MonthViewSideProps = MonthViewProps & {
 const MonthViewFront = ({ month, onFlip }: MonthViewSideProps) => {
 	return (
 		<>
-			<h2 class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4">
-				{monthName(month)}
-			</h2>
+			<MonthNameDisplay month={month} />
 			<FlipButton onClick={onFlip} />
+			<MonthWageView month={month} />
 		</>
 	);
 };
@@ -119,9 +220,7 @@ const MonthViewFront = ({ month, onFlip }: MonthViewSideProps) => {
 const MonthViewBack = ({ month, onFlip }: MonthViewSideProps) => {
 	return (
 		<>
-			<h2 class="text-2xl text-sky-700 dark:text-sky-300 font-thin uppercase my-4">
-				{monthName(month)}
-			</h2>
+			<MonthNameDisplay month={month} />
 			<FlipButton onClick={onFlip} />
 			<MonthCalendarView month={month} />
 		</>
