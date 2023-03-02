@@ -10,6 +10,8 @@
 		"@grenutv/dates": "workspace:*",
 		"@grenutv/tax-calc": "workspace:*",
 		"autoprefixer": "10.4.13",
+		"eslint": "8.34.0",
+		"eslint-plugin-solid": "0.10.0",
 		"postcss": "8.4.21",
 		"solid-devtools": "0.26.0",
 		"solid-start-node": "0.2.19",
