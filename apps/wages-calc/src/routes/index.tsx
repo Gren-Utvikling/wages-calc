@@ -1,9 +1,10 @@
 import { years } from '@grenutv/tax-calc';
-import { type CalendarMonth, year } from '@grenutv/dates';
+import { year } from '@grenutv/dates';
 import { type Temporal } from 'temporal-polyfill';
-import { type Accessor, createSignal, type JSX } from 'solid-js';
+import { createSignal, type JSX } from 'solid-js';
 import { FlipButton, FlipCard } from '~/components/FlipCard';
 import { clsx } from 'clsx';
+import { DayState, MonthState, createYearState } from '~/state/calendar.js';
 
 const currentYear = years[years.length - 1];
 const calendar = await year(currentYear);
@@ -15,7 +16,7 @@ const monthNames = (() => {
 	);
 })();
 
-const monthName = (month: CalendarMonth) => {
+const monthName = (month: MonthState) => {
 	return monthNames[month.month.month - 1];
 };
 
@@ -27,6 +28,7 @@ type CalCelProps = {
 	};
 	readonly row: number;
 	readonly col: number;
+	readonly onClick?: () => void;
 };
 
 const rowClass = (row: number) => {
@@ -75,13 +77,14 @@ const CalCell = ({
 	classList,
 	row,
 	col,
+	onClick,
 }: CalCelProps) => {
 	const rowClassName = rowClass(row);
 	const colClassName = colClass(col);
 	const classes = clsx(rowClassName, colClassName, className, 'p-2');
 
 	return (
-		<div class={classes} classList={classList}>
+		<div class={classes} classList={classList} onClick={onClick}>
 			{children}
 		</div>
 	);
@@ -89,12 +92,12 @@ const CalCell = ({
 
 const DayView = ({
 	day,
-	type,
+	state,
 	row,
 	col,
 }: {
 	readonly day: Temporal.PlainDate;
-	readonly type: Accessor<'workday' | 'offday' | 'vacation'>;
+	readonly state: DayState;
 	readonly row: number;
 	readonly col: number;
 }) => {
@@ -103,17 +106,21 @@ const DayView = ({
 			row={row}
 			col={col}
 			classList={{
-				'dark:bg-green-900': type() === 'workday',
-				'dark:bg-red-900': type() === 'offday',
-				'dark:bg-blue-900': type() === 'vacation',
+				'dark:bg-green-900': state.type() === 'workday',
+				'dark:bg-red-900': state.type() === 'offday',
+				'dark:bg-blue-900': state.type() === 'vacation',
+			}}
+			onClick={() => {
+				debugger;
+				state.value.set(state.value.get() === 0 ? 7.5 : 0);
 			}}
 		>
-			{day.day}
+			{state.value.get()}
 		</CalCell>
 	);
 };
 
-const MonthCalendarView = ({ month }: { readonly month: CalendarMonth }) => {
+const MonthCalendarView = ({ month }: MonthViewProps) => {
 	const firstDay = month.days[0].day;
 	const headings: JSX.Element[] = [
 		<CalCell row={0} col={0} class="dark:bg-orange-900">
@@ -165,12 +172,7 @@ const MonthCalendarView = ({ month }: { readonly month: CalendarMonth }) => {
 		}
 
 		days.push(
-			<DayView
-				row={row}
-				col={day.day.dayOfWeek}
-				day={day.day}
-				type={() => day.type}
-			/>
+			<DayView row={row} col={day.day.dayOfWeek} day={day.day} state={day} />
 		);
 	}
 
@@ -184,13 +186,48 @@ const MonthCalendarView = ({ month }: { readonly month: CalendarMonth }) => {
 };
 
 type MonthViewProps = {
-	readonly month: CalendarMonth;
+	readonly month: MonthState;
 };
 
 const MonthWageView = ({ month }: MonthViewProps) => {
 	return (
 		<div>
-			<p>Front</p>
+			<dl>
+				<dt class="text-sm text-sky-500 dark:text-sky-400 font-medium">
+					Total days
+				</dt>
+				<dd class="text-2xl text-sky-700 dark:text-sky-300 font-thin">
+					{month.days.length}
+				</dd>
+
+				<dt class="text-sm text-sky-500 dark:text-sky-400 font-medium">
+					Total workdays
+				</dt>
+				<dd class="text-2xl text-sky-700 dark:text-sky-300 font-thin">
+					{month.workDays()}
+				</dd>
+
+				<dt class="text-sm text-sky-500 dark:text-sky-400 font-medium">
+					Total off days
+				</dt>
+				<dd class="text-2xl text-sky-700 dark:text-sky-300 font-thin">
+					{month.offDays()}
+				</dd>
+
+				<dt class="text-sm text-sky-500 dark:text-sky-400 font-medium">
+					Total vaccation days
+				</dt>
+				<dd class="text-2xl text-sky-700 dark:text-sky-300 font-thin">
+					{month.vacationDays()}
+				</dd>
+
+				<dt class="text-sm text-sky-500 dark:text-sky-400 font-medium">
+					Total hours
+				</dt>
+				<dd class="text-2xl text-sky-700 dark:text-sky-300 font-thin">
+					{month.totalHours()}
+				</dd>
+			</dl>
 		</div>
 	);
 };
@@ -227,7 +264,7 @@ const MonthViewBack = ({ month, onFlip }: MonthViewSideProps) => {
 	);
 };
 
-const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
+const MonthView = ({ month }: MonthViewProps) => {
 	const [flipped, setFlipped] = createSignal(false);
 	const flip = () => {
 		setFlipped((v) => !v);
@@ -243,13 +280,15 @@ const MonthView = ({ month }: { readonly month: CalendarMonth }) => {
 };
 
 export default function Home() {
+	const state = createYearState(calendar);
+
 	return (
 		<main class="text-center mx-auto text-gray-700 dark:text-gray-300 p-4">
 			<h1 class="max-6-xs text-6xl text-sky-700 dark:text-sky-300 font-thin uppercase my-16">
-				{calendar.year}
+				{state.year}
 			</h1>
 			<div class="grid grid-cols-3 gap-4">
-				{calendar.months.map((month) => (
+				{state.months.map((month) => (
 					<MonthView month={month} />
 				))}
 			</div>

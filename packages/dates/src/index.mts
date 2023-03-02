@@ -4,5 +4,6 @@ export type {
 	CalendarMonth,
 	CalendarDay,
 	DayOfWeekName,
+	DayType,
 	MonthName,
 } from './types.mjs';
