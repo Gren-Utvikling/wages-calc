@@ -1,7 +1,7 @@
 import { years } from '@grenutv/tax-calc';
 import { year } from '@grenutv/dates';
 import { type Temporal } from 'temporal-polyfill';
-import { createMemo, createSignal, type JSX } from 'solid-js';
+import { Accessor, createMemo, createSignal, type JSX } from 'solid-js';
 import { FlipButton, FlipCard } from '~/components/FlipCard';
 import { clsx } from 'clsx';
 import { DayState, MonthState, createYearState } from '~/state/calendar.js';
@@ -22,7 +22,7 @@ const monthName = (month: MonthState) => {
 
 type CalCelProps = {
 	readonly children: JSX.Element;
-	readonly class?: string;
+	readonly class?: Accessor<string>;
 	readonly classList?: {
 		readonly [k: string]: boolean | undefined;
 	};
@@ -81,10 +81,13 @@ const CalCell = ({
 }: CalCelProps) => {
 	const rowClassName = rowClass(row);
 	const colClassName = colClass(col);
-	const classes = clsx(rowClassName, colClassName, className, 'p-2');
+	const classes = createMemo(() => {
+		const input = typeof className === 'function' ? className() : className;
+		return clsx(rowClassName, colClassName, input, 'p-2');
+	});
 
 	return (
-		<div class={classes} classList={classList} onClick={onClick}>
+		<div class={classes()} classList={classList} onClick={onClick}>
 			{children}
 		</div>
 	);
@@ -118,7 +121,7 @@ const DayView = ({
 		<CalCell
 			row={row}
 			col={col}
-			class={className()}
+			class={className}
 			onClick={() => {
 				state.value.set(state.value.get() === 0 ? 7.5 : 0);
 			}}
