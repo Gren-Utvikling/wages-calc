@@ -1,7 +1,7 @@
 import { years } from '@grenutv/tax-calc';
 import { year } from '@grenutv/dates';
 import { type Temporal } from 'temporal-polyfill';
-import { createSignal, type JSX } from 'solid-js';
+import { createMemo, createSignal, type JSX } from 'solid-js';
 import { FlipButton, FlipCard } from '~/components/FlipCard';
 import { clsx } from 'clsx';
 import { DayState, MonthState, createYearState } from '~/state/calendar.js';
@@ -101,21 +101,29 @@ const DayView = ({
 	readonly row: number;
 	readonly col: number;
 }) => {
+	const className = createMemo(() => {
+		switch (state.type()) {
+			case 'workday':
+				return 'dark:bg-green-900';
+
+			case 'offday':
+				return 'dark:bg-red-900';
+
+			case 'vacation':
+				return 'dark:bg-blue-900';
+		}
+	});
+
 	return (
 		<CalCell
 			row={row}
 			col={col}
-			classList={{
-				'dark:bg-green-900': state.type() === 'workday',
-				'dark:bg-red-900': state.type() === 'offday',
-				'dark:bg-blue-900': state.type() === 'vacation',
-			}}
+			class={className()}
 			onClick={() => {
-				debugger;
 				state.value.set(state.value.get() === 0 ? 7.5 : 0);
 			}}
 		>
-			{state.value.get()}
+			{state.value.get()}h
 		</CalCell>
 	);
 };
